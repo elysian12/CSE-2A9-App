@@ -1,9 +1,10 @@
+import 'package:cse_2a9/data/authentication/google_signin_auth.dart';
 import 'package:cse_2a9/data/dataprovider/theme_data.dart';
-import 'package:cse_2a9/presentation/screens/homepage.dart';
 import 'package:cse_2a9/presentation/widgets/spacing.dart';
 // ignore: unused_import
 import 'package:cse_2a9/presentation/widgets/textstyle.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LandingPage extends StatelessWidget {
   @override
@@ -50,11 +51,9 @@ class LandingPage extends StatelessWidget {
             largeVerticalSpace(),
             GestureDetector(
               onTap: () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HomePage(),
-                    ));
+                final provider =
+                    Provider.of<GoogleSignInProvider>(context, listen: false);
+                provider.login();
               },
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 30),

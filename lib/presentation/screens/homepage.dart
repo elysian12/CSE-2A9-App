@@ -3,8 +3,10 @@ import 'package:cse_2a9/presentation/widgets/categorie_widget.dart';
 import 'package:cse_2a9/presentation/widgets/spacing.dart';
 import 'package:cse_2a9/presentation/widgets/textstyle.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomePage extends StatelessWidget {
+  final user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +31,7 @@ class HomePage extends StatelessWidget {
         children: [
           smallVerticalSpace(),
           Text(
-            'Hey Aman,',
+            'Hey ${user.displayName.split(' ')[0]},',
             style: mediumtextstyle(),
           ),
           Container(

@@ -1,9 +1,10 @@
-// import 'package:cse_2a9/data/authentication/auth.dart';
-import 'package:cse_2a9/presentation/screens/landingpage.dart';
+import 'package:cse_2a9/data/authentication/google_signin_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 class AppDrawer extends StatelessWidget {
-
+  final user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -16,8 +17,12 @@ class AppDrawer extends StatelessWidget {
             const SizedBox(
               height: 48,
             ),
-            buildHeader(context, 'user.photoURL', 'user.displayName',
-                'user.email', () {}),
+            buildHeader(
+                context: context,
+                email: user.email,
+                name: user.displayName,
+                onclicked: () {},
+                urlImage: user.photoURL),
             const SizedBox(
               height: 30,
             ),
@@ -31,7 +36,14 @@ class AppDrawer extends StatelessWidget {
             const SizedBox(
               height: 16,
             ),
-            buildMenu(text: 'Logout', icon: Icons.logout, onclicked: () {}),
+            buildMenu(
+                text: 'Logout',
+                icon: Icons.logout,
+                onclicked: () {
+                  final provider =
+                      Provider.of<GoogleSignInProvider>(context, listen: false);
+                  provider.logout();
+                }),
             const SizedBox(
               height: 16,
             ),
@@ -60,19 +72,20 @@ class AppDrawer extends StatelessWidget {
     );
   }
 
-  Widget buildHeader(
+  Widget buildHeader({
     BuildContext context,
     String urlImage,
     String name,
     String email,
     VoidCallback onclicked,
-  ) =>
+  }) =>
       InkWell(
         child: Container(
             child: Column(
           children: [
             CircleAvatar(
               radius: 28,
+              backgroundImage: NetworkImage(urlImage),
             ),
             SizedBox(height: 18),
             Text(
@@ -100,11 +113,9 @@ class AppDrawer extends StatelessWidget {
             OutlineButton(
               borderSide: BorderSide(color: Colors.blue),
               onPressed: () {
-                
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => LandingPage()));
+                final provider =
+                    Provider.of<GoogleSignInProvider>(context, listen: false);
+                provider.logout();
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 36),
